@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ASK_FORM));
             this.llblQ2 = new System.Windows.Forms.LinkLabel();
             this.gbQuestion = new System.Windows.Forms.GroupBox();
             this.llblQ12 = new System.Windows.Forms.LinkLabel();
@@ -46,6 +47,10 @@
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.pnlAdvance = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtFinish = new System.Windows.Forms.TextBox();
+            this.txtStart = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.cbbDVChuQuan = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbbTinhThanh = new System.Windows.Forms.ComboBox();
@@ -279,21 +284,61 @@
             // 
             // pnlAdvance
             // 
+            this.pnlAdvance.Controls.Add(this.label4);
+            this.pnlAdvance.Controls.Add(this.txtFinish);
+            this.pnlAdvance.Controls.Add(this.txtStart);
+            this.pnlAdvance.Controls.Add(this.label3);
             this.pnlAdvance.Controls.Add(this.cbbDVChuQuan);
             this.pnlAdvance.Controls.Add(this.label2);
             this.pnlAdvance.Controls.Add(this.cbbTinhThanh);
             this.pnlAdvance.Controls.Add(this.label1);
             this.pnlAdvance.Location = new System.Drawing.Point(69, 87);
             this.pnlAdvance.Name = "pnlAdvance";
-            this.pnlAdvance.Size = new System.Drawing.Size(598, 158);
+            this.pnlAdvance.Size = new System.Drawing.Size(598, 162);
             this.pnlAdvance.TabIndex = 7;
             this.pnlAdvance.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(240, 130);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 15);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "ĐẾN";
+            // 
+            // txtFinish
+            // 
+            this.txtFinish.Enabled = false;
+            this.txtFinish.Location = new System.Drawing.Point(282, 127);
+            this.txtFinish.Name = "txtFinish";
+            this.txtFinish.Size = new System.Drawing.Size(63, 21);
+            this.txtFinish.TabIndex = 7;
+            this.txtFinish.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFinish_KeyPress);
+            // 
+            // txtStart
+            // 
+            this.txtStart.Enabled = false;
+            this.txtStart.Location = new System.Drawing.Point(163, 127);
+            this.txtStart.Name = "txtStart";
+            this.txtStart.Size = new System.Drawing.Size(66, 21);
+            this.txtStart.TabIndex = 6;
+            this.txtStart.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtStart_KeyPress);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(25, 130);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(119, 15);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "ĐIỂM CHUẢN  TỪ";
             // 
             // cbbDVChuQuan
             // 
             this.cbbDVChuQuan.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbDVChuQuan.FormattingEnabled = true;
-            this.cbbDVChuQuan.Location = new System.Drawing.Point(163, 76);
+            this.cbbDVChuQuan.Location = new System.Drawing.Point(163, 77);
             this.cbbDVChuQuan.Name = "cbbDVChuQuan";
             this.cbbDVChuQuan.Size = new System.Drawing.Size(182, 23);
             this.cbbDVChuQuan.TabIndex = 3;
@@ -311,7 +356,7 @@
             // 
             this.cbbTinhThanh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbTinhThanh.FormattingEnabled = true;
-            this.cbbTinhThanh.Location = new System.Drawing.Point(163, 29);
+            this.cbbTinhThanh.Location = new System.Drawing.Point(163, 27);
             this.cbbTinhThanh.Name = "cbbTinhThanh";
             this.cbbTinhThanh.Size = new System.Drawing.Size(182, 23);
             this.cbbTinhThanh.TabIndex = 1;
@@ -319,7 +364,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(27, 32);
+            this.label1.Location = new System.Drawing.Point(25, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 15);
             this.label1.TabIndex = 0;
@@ -371,6 +416,7 @@
             this.cbbTieuChi.Name = "cbbTieuChi";
             this.cbbTieuChi.Size = new System.Drawing.Size(173, 23);
             this.cbbTieuChi.TabIndex = 9;
+            this.cbbTieuChi.SelectedIndexChanged += new System.EventHandler(this.cbbTieuChi_SelectedIndexChanged);
             // 
             // ASK_FORM
             // 
@@ -383,6 +429,7 @@
             this.Controls.Add(this.gbQuestion);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(0, -25);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -430,6 +477,10 @@
         private System.Windows.Forms.Label label2;
         
         private System.Windows.Forms.ComboBox cbbTieuChi;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox txtFinish;
+        private System.Windows.Forms.TextBox txtStart;
+        private System.Windows.Forms.Label label3;
        
     }
 }

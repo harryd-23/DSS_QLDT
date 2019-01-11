@@ -60,6 +60,13 @@ namespace QLDT.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap _49344496_368206760398838_1455655113438789632_n {
+            get {
+                object obj = ResourceManager.GetObject("49344496_368206760398838_1455655113438789632_n", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap about {
             get {
                 object obj = ResourceManager.GetObject("about", resourceCulture);

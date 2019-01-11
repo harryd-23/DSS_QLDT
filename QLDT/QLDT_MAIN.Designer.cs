@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QLDT_MAIN));
             this.btnAbout = new System.Windows.Forms.Button();
             this.btnShow = new System.Windows.Forms.Button();
             this.btnAsk = new System.Windows.Forms.Button();
@@ -111,20 +112,20 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.Font = new System.Drawing.Font("Sitka Banner", 21F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTitle.Font = new System.Drawing.Font("Sitka Banner", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.SystemColors.Highlight;
             this.lblTitle.Location = new System.Drawing.Point(29, 9);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(779, 72);
+            this.lblTitle.Size = new System.Drawing.Size(779, 44);
             this.lblTitle.TabIndex = 2;
-            this.lblTitle.Text = "PHẦN MỀM QUẢN LÝ CƠ SỞ ĐÀO TẠO CÔNG NGHỆ THÔNG TIN";
+            this.lblTitle.Text = "PHẦN MỀM HỖ TRỢ QUẢN LÝ CƠ SỞ ĐÀO TẠO CÔNG NGHỆ THÔNG TIN";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.label1.Location = new System.Drawing.Point(246, 68);
+            this.label1.Location = new System.Drawing.Point(245, 53);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(341, 35);
             this.label1.TabIndex = 3;
@@ -143,6 +144,7 @@
             this.Controls.Add(this.btnShow);
             this.Controls.Add(this.btnAsk);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "QLDT_MAIN";
             this.Text = "PHẦN MỀM QUẢN LÝ CƠ SỞ ĐÀO TẠO CNTT CẢ NƯỚC";

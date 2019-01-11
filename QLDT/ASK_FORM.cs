@@ -12,7 +12,7 @@ namespace QLDT
 {
     public partial class ASK_FORM : Form
     {
-        string query;
+        string query, query1;
         bool advanceClicked = false;
         static bool isOpenAdvance = false;
         bool cbbLoaded = false;
@@ -177,12 +177,35 @@ namespace QLDT
                     cbbTextDVChuQuan = "";
                 if (cbbTextTinhThanh.Equals("None"))
                     cbbTextTinhThanh = "";
+                String scoreStart = txtStart.Text;
+                String scoreFinish = txtFinish.Text;
+                if (scoreStart == "" && scoreFinish == "")
+                {
+                    scoreStart = "0";
+                    scoreFinish = "30";
+                }
+                else if(scoreStart == "" && scoreFinish != "")
+                {
+                    scoreStart = "0";
+                }
+                else if (scoreStart != "" && scoreFinish == "")
+                {
+                    scoreFinish = "30";
+                }
+
                 if (numberSearch == 1)
                 {
                     query = "Select [MaTruong] 'MÃ TRƯỜNG' ,[TenTruong] 'TÊN TRƯỜNG' ,[DiaChi] 'ĐỊA CHỈ' ,[Website] 'WEBSITE',[TinhThanh] 'TỈNH THÀNH' ,[DVChuquan] 'ĐƠN VỊ CHỦ QUẢN' From [QLDT].[dbo].[cosodaotao] WHERE " + criteria_field + " LIKE N'%" + input + "%' AND TinhThanh LIKE N'%" + cbbTextTinhThanh + "%' AND DVChuQuan LIKE N'%" + cbbTextDVChuQuan + "%';";
                 }
-                else if (numberSearch == 0) {
-                    query = "SELECT [QLDT].[dbo].[cosodaotao].[TenTruong] as 'TÊN TRƯỜNG' ,[QLDT].[dbo].[chuyennganhdaotao].[TenChuyenNganh] as 'TÊN CHUYÊN NGÀNH', [QLDT].[dbo].[cosonganh].[MaNganh] as 'MÃ NGÀNH' FROM [QLDT].[dbo].[cosonganh],[QLDT].[dbo].[cosodaotao], [QLDT].[dbo].[chuyennganhdaotao] WHERE [QLDT].[dbo].[cosonganh].[MaTruong]=[QLDT].[dbo].[cosodaotao].[MaTruong] AND [QLDT].[dbo].[cosonganh].[MaNganh]=[QLDT].[dbo].[chuyennganhdaotao].[MaNganh] AND [QLDT].[dbo].[chuyennganhdaotao].[" + criteria_field + "] LIKE N'%" + input + "%'AND TinhThanh LIKE N'%" + cbbTextTinhThanh + "%' AND DVChuQuan LIKE N'%" + cbbTextDVChuQuan + "%';";
+                else if (numberSearch == 0)
+                {
+                    if (float.Parse(txtFinish.Text) < float.Parse(txtStart.Text))
+                    {
+                        MessageBox.Show("Vui lòng nhập lại điểm hợp lệ!");
+                        return;
+                    }
+                        query = "SELECT [QLDT].[dbo].[cosodaotao].[TenTruong] as 'TÊN TRƯỜNG' ,[QLDT].[dbo].[chuyennganhdaotao].[TenChuyenNganh] as 'TÊN CHUYÊN NGÀNH', [QLDT].[dbo].[cosonganh].[MaNganh] as 'MÃ NGÀNH', cosonganh.DiemChuan as 'ĐIỂM CHUẨN' FROM [QLDT].[dbo].[cosonganh],[QLDT].[dbo].[cosodaotao], [QLDT].[dbo].[chuyennganhdaotao] WHERE [QLDT].[dbo].[cosonganh].[MaTruong]=[QLDT].[dbo].[cosodaotao].[MaTruong] AND [QLDT].[dbo].[cosonganh].[MaNganh]=[QLDT].[dbo].[chuyennganhdaotao].[MaNganh] AND [QLDT].[dbo].[chuyennganhdaotao].[" + criteria_field + "] LIKE N'%" + input + "%'AND TinhThanh LIKE N'%" + cbbTextTinhThanh + "%' AND DVChuQuan LIKE N'%" + cbbTextDVChuQuan + "%' AND (cosonganh.DiemChuan > " + scoreStart + " AND cosonganh.DiemChuan < " + scoreFinish + ");";
+
                 }
             }
             //MessageBox.Show(query);
@@ -245,8 +268,9 @@ namespace QLDT
         private void llblQ7_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             //Chi tieu tuyen sinh cac truong
-            query = "SELECT [QLDT].[dbo].[cosodaotao].[TenTruong] as 'TÊN TRƯỜNG' ,SUM([QLDT].[dbo].[cosonganh].[ChiTieu]) as 'TỔNG CHỈ TIÊU 2018' FROM [QLDT].[dbo].[cosonganh],[QLDT].[dbo].[cosodaotao] WHERE [QLDT].[dbo].[cosonganh].[MaTruong]=[QLDT].[dbo].[cosodaotao].[MaTruong] GROUP BY [QLDT].[dbo].[cosodaotao].[TenTruong]";
-            controller.PushDataToShowForm(query);
+            query = "select (case when SL >= 500 then N'TRÊN 500' when SL < 500 and SL >= 100 then N'TỪ 100 ĐẾN 500' when SL < 100 then N'DƯỚI 100' else 'other' end) as ChiTieu, count(*) as SoLuong from (select sum(ChiTieu) as SL from cosonganh group by MaTruong) src group by (case when SL >= 500 then N'TRÊN 500' when SL < 500 and SL >= 100 then N'TỪ 100 ĐẾN 500' when SL < 100 then N'DƯỚI 100' else 'other' end);";
+            query1 = "select cosodaotao.TenTruong, SL from cosodaotao left join (select MaTruong as MT,SUM(ChiTieu) as SL from cosonganh group by MaTruong) src on cosodaotao.MaTruong = src.MT";
+            controller.PushDataToShowChart(query, query1);
         }
 
         private void llblQ8_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -274,7 +298,8 @@ namespace QLDT
         {
             //11. Điểm chuẩn theo từng chuyên ngành tại các trường ?
             query = "SELECT [QLDT].[dbo].[cosodaotao].[TenTruong] as 'TÊN TRƯỜNG' ,[QLDT].[dbo].[chuyennganhdaotao].[MaNganh] as 'MÃ NGÀNH' ,[QLDT].[dbo].[chuyennganhdaotao].[TenChuyenNganh] as 'TÊN CHUYÊN NGÀNH' ,[QLDT].[dbo].[cosonganh].[DiemChuan] 'ĐIỂM CHUẨN' FROM [QLDT].[dbo].[chuyennganhdaotao],[QLDT].[dbo].[cosonganh],[QLDT].[dbo].[cosodaotao] WHERE [QLDT].[dbo].[chuyennganhdaotao].MaNganh=[QLDT].[dbo].[cosonganh].MaNganh AND [QLDT].[dbo].[cosonganh].[MaTruong]=[QLDT].[dbo].[cosodaotao].[MaTruong]";
-            controller.PushDataToShowForm(query);
+            query1 = "select (case when SL >= 25 then N'TRÊN 25' when SL<25 and SL >= 20 then N'TỪ 20 ĐẾN 25' when SL < 20 then N'DƯỚI 20' else 'other' end) as ChiTieu, count(*) as SoLuong from (select DiemChuan as SL from cosonganh) src group by (case when SL >= 25 then N'TRÊN 25' when SL<25 and SL >= 20 then N'TỪ 20 ĐẾN 25' when SL < 20 then N'DƯỚI 20' else 'other' end);";
+            controller.PushDataToShowChart(query1,query);
         }
 
         private void llblQ12_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -299,7 +324,81 @@ namespace QLDT
         {
             btnAdvanced.Text = "NÂNG CAO";
         }
+
+        private void txtStart_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar)
+                && !char.IsDigit(e.KeyChar)
+                && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            if (e.KeyChar == '.'
+                && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtStart_TextChanged(object sender, EventArgs e)
+        {
+            int result;
+            if (txtStart.Text != "")
+            {
+                if (!int.TryParse(txtStart.Text, out result))
+                {
+                    txtStart.Text = "";
+                    MessageBox.Show("Invalid Integer");
+                }
+            }
+        }
+
+        private void txtFinish_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar)
+                && !char.IsDigit(e.KeyChar)
+                && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            if (e.KeyChar == '.'
+                && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtFinish_TextChanged(object sender, EventArgs e)
+        {
+            int result;
+            if (txtFinish.Text != "")
+            {
+                if (!int.TryParse(txtFinish.Text, out result))
+                {
+                    txtFinish.Text = "";
+                    MessageBox.Show("Invalid Integer");
+                }
+            }
+            
+        }
+
+        private void cbbTieuChi_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbbTieuChi.SelectedIndex == 1 || cbbTieuChi.SelectedIndex == 3)
+            {
+                txtFinish.Enabled = true;
+                txtStart.Enabled = true;
+            }
+            else 
+            {
+                txtFinish.Enabled = false;
+                txtStart.Enabled = false;
+            }
+        }
     }
+
     public class ComboboxItem
     {
         public string Text { get; set; }

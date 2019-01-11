@@ -15,14 +15,6 @@ namespace QLDT
         {
             DataTable dt = getDataTable(query);
 
-            //var dt2 = dt.Clone();
-            //var x = dt.Rows.Count;
-
-            //for (var i = 0; i <= x / 10; i++)
-            //{
-            //    dt2.Rows.Add(dt.Rows[i].ItemArray);
-            //}
-
             if (dt.Rows.Count == 0)
             {
                 MessageBox.Show("Không có dữ liệu thỏa mãn");
@@ -33,6 +25,23 @@ namespace QLDT
                 sf.ShowDialog();
             }
         }
+
+        public void PushDataToShowChart(string query1, string query2)
+        {
+            DataTable dt1 = getDataTable(query1);
+            DataTable dt2 = getDataTable(query2);
+            if (dt1.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu thỏa mãn");
+            }
+            else
+            {
+                STATISTIC_FORM sf = new STATISTIC_FORM(dt1, dt2);
+                sf.ShowDialog();
+            }
+        }
+
+
         private DataTable getDataTable(String query)
         {
             DataTable dt = new DataTable();
